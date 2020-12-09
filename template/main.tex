@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+
+% --- Packages ---
+\usepackage[usenames, dvipsnames]{color} % Cool colors
+\usepackage{enumerate, amsmath, amsthm, amssymb, mathrsfs, algorithm, algpseudocode, fontawesome, pifont, subfig, fullpage, csquotes, dashrule, tikz, bbm, booktabs, bm, hyperref, wasysym}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[numbers]{natbib}
+\usepackage[normalem]{ulem}
+
+% --- Misc. ---
+\hbadness=10000 % No "underfull hbox" messages.
+\setlength{\parindent}{0pt} % Removes all indentation.
+
+% -- Commands --
+\input{commands}
+
+% Nice coloring of references.
+\usepackage{hyperref}
+\hypersetup{               
+    colorlinks=true,              
+    breaklinks=true,               
+    urlcolor=dblue,
+    linkcolor=dgreen,
+    linkbordercolor=dgreen,
+    citecolor=dblue,
+    citebordercolor=dblue
+}
+
+
+
+\title{Conference Name and Year Notes \\ \Large{Conference Location}}
+\author{Author\footnote{\durl{Author personal page}} \\ \durl{Author email}}
+\date{Date}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+
+This document contains notes I took during the events I managed to make it to at <the conference>. Please feel free to distribute it and shoot me an email at \durl{contact email} if you find any typos or other items that need correcting. \\
+
+
+
+%\section{Conference Highlights}
+
+% ------------
+% -- Monday --
+% ------------
+\newpage
+\section{Monday December 7th}
+\input{days/monday_december_7_2020.tex}
+
+
+% --- Bibliography ---
+\newpage
+\bibliographystyle{plainnat}
+\bibliography{bibliography}
+
+\end{document}
