@@ -21,7 +21,7 @@ In this case, getting SVD results from a layer will take no time (because values
 {\bf Problem:} SVD cannot be directly directly formulated as a part of gradient descent step: 
 \begin{equation} 
   \hat{M} != M - \eta\nabla_{M}
-\end{equation} \\
+\end{equation} 
 
 {\bf Method:} develop the Fast Householder Multiplication (FastH) method, which is a modification of the Householder transformation that supports parallel execution to better utilize GPU resources and includes some linear algebra tricks \\
 
