@@ -1,9 +1,13 @@
 \subsection{Workshop: Workshop on Deep Learning and Inverse Problems}
 
+Even though this workshop is dedicated to inverse problems in broad sense of this term, the majority of presentations are somehow related with imaging. 
+Moreover, significant fraction of them is either dedicated to MRI reconstruction or at least somehow mention it. 
+This observation underlines consensus of the research community on the importance of this problem.
+
 \subsubsection{Uncertainty Quantification in Deep MRI
 Reconstruction \cite{edupuganti2020uncertainty}}
 
-Presented by \textit{Vineet Edupuganti} \\
+Presented by \textit{Vineet Edupuganti}. \\
 
 {\bf Motivation:} accelerated MRI reconstruction is unreliable, especially when generative models are applied. Need to estimate uncertainty of a reconstruction model to help radiologist to avoid mistakes. \\
 
@@ -69,6 +73,145 @@ An example of high correlation between estimated SURE values are computed MSE er
 
 
 
-\subsubsection{ \cite{}}
+\subsubsection{Model Adaptation for Inverse Problems in Imaging \cite{gilton2020model}}
 
-Presented by \textit{} \\
+Presented by \textit{Rebecca Willett}. \\
+
+{\bf Motivation:} having measurements $y$ and a neural network $f_{\phi}$ trained with some forward model $A_0$, make high quality reconstructions $\hat{x}$ if forward model used during inference $A_1$ is different from the one using for training ($A_0$). 
+The scheme of the task setup is represented on fig. \ref{fig:inv_prob_setup}
+Authors call this phenomenon a \textit{model drift}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.3]{neurips-2020/images/Screenshot 2020-12-13 at 20.44.08.png}
+    \caption{Neural network with parameters $\phi$ (and optionally A) inputs $y$ and outputs an estimate $\hat{x}$.}
+    \label{fig:inv_prob_setup}
+\end{figure} \\
+
+{\bf Example:} train a fast MRI network with one acceleration rate but perform inference on some different acceleration rate. 
+Even if the acceleration rate is lower, there is a domain shift that makes the network less capable to produce a high-quality estimate. \\
+
+{\bf Definitions:} 
+\begin{itemize}
+    \item {\bf Distribution drift:} $p(X, Y)$ changes \textit{in unknown way} between train and deployment
+    \item {\bf Model drift:} $p(X, Y)$ changes \textit{in known or partially known way} between train and deployment
+    \item {\bf Domain adaptation:} first train with many samples $(x_i^{(0)}, y_i^{(0)}) \sim p_0$, then adapt using few samples from $(x_i^{(1)}, y_i^{(1)}) \sim p_1$
+    \item {\bf Model adaptation:} first train with many samples $(x_i^{(0)}, y_i^{(0)}) \sim p_0$ and, then adapt using few samples from  $(?, y_i^{(1)}) \sim p_1$ (images are not known) 
+\end{itemize}
+\\ 
+
+{\bf Method:} train a reconstruction network for a known forward model then adapt to a new forward model without access to ground truth images, and without knowing the exact parameters of the new forward model. \\
+
+\underline{Proposed approaches are:}   
+
+{\bf Parametrize and Perturb}: use calibration data to \textit{perturb} parameters of the original reconstruction network. 
+In practice it means conversion of $f_0$ to some $f_1$ that will be able to handle $A_1$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 21.21.21.png}
+    \caption{Illustration of the Parametrize and Perturb approach. $f$ is perturbed to be able to handle $A_1$ during the inference time.}
+    \label{fig:PP_approach}
+\end{figure} \\
+
+{\bf Condition and Correct}: train a new (correction) network $h_{\theta}$ to map $A_1$ to $A_0$ and then apply $f_{\phi}$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 21.24.26.png}
+    \caption{Illustration of the Condition and Correct approach. Output of the $A_1$ is made similar to $A_0$ and then $f_\phi$ is applied}.
+    \label{fig:my_label}
+\end{figure}
+
+
+
+{\bf Results:} authors show high-quality results (fig. \ref{fig:adaptation_results_11}, \ref{fig:adaptation_results_2}, \ref{fig:fast_mri_recon}, \ref{fig:moco_recon}), which confirm that their methods allow to increase the quality of resulting images if model drift takes place.
+More concretely:
+\begin{itemize}
+    \item Condition and Correct method, in general, works a little bit better.
+    \item The most significant visual improvements are presented for the motion correction problem.
+    \label{fig:adaptation_results_11}
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 21.34.45.png}
+    \caption{Comparison between performance of the reconstruction model in case if $A_1$ is unknown (realistic setting) on various inverse problems.}
+    \label{fig:adaptation_results_2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 21.13.23.png}
+    \caption{Example of the performance of the proposed method for the fast MRI reconstruction problem}
+    \label{fig:fast_mri_recon}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 21.13.52.png}
+    \caption{Example of the performance of the proposed method for the general domain motion correction problem}
+    \label{fig:moco_recon}
+\end{figure}
+
+
+
+
+
+\subsubsection{fastMRI}
+
+Presented by \textit{Larry Zitnick}. \\
+
+{\bf Motivation:} describe the fastmMRI problem, present a network by organizers of the fastMRI challenge, describe model evaluation process \\
+
+{\bf Note:} for some reason problem of the fastMRI challenge 2019 are discussed. 
+Not sure why authors did not also include discussion of this year's problem. \\
+
+{\bf Problem:} reconstructions from the model have less noise hence look unnatural to radiologists.
+
+{\bf Solution:} add noise to the model recons (fig. \ref{fig:smooth_fastmri}). 
+This approach worked good for them (radiologists are satisfied). \\
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 22.23.29.png}
+    \caption{Example of high-quality but oversmoothed result from the reconstruction model.}
+    \label{fig:smooth_fastmri}
+\end{figure}
+
+{\bf Observation:} authors experienced horizontal banding artefacts (fig. \ref{fig:binding_artecats}) in their multi-coil 4x reconstructions. 
+Reason - insufficient sampling pattern. 
+K-space is sampled vertically (Cartesian sampling), which results in higher resolution in vertical dimension compared to the horizontal dimension and hence causing horizontal artefacts (explanation for the presenter). \\
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{neurips-2020/images/Screenshot 2020-12-13 at 22.32.40.png}
+    \caption{Horizontal binding artefacts caused by insufficient sampling pattern.}
+    \label{fig:binding_artecats}
+\end{figure} 
+
+{\bf Method:} most of the talk very similar to the same talk from the last year. 
+The new part was the interchangeability study, which authors performed using 4x acceleration (3T) and 108 patients. 
+Reconstructions were reviewed by 6 radiologists according to the following process:
+\begin{itemize}
+    \item Radiologist reviews a scan
+    \item Waits one month
+    \item Same radiologist reviews the scan
+    \item Separate radiologist compares the two reports
+\end{itemize} \\
+
+{\bf Results:} in the previously described setting:
+\begin{itemize}
+    \item New reconstructions are diagnostically interchangeable with traditional MRIs
+    \item Radiologists could not distinguish which images were produced with AI and which came from the slower traditional scans
+    \item All examiners rated the AI-generated images as being higher in quality than traditional scans
+\end{itemize}
+
+Note that all these results are obtained only for a single anatomy (knee) and for a limited number of protocols (only the ones that are present in the fastMRI knee dataset).
+
+
+
+
+
+
+
