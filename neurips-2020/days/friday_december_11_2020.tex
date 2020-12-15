@@ -79,14 +79,14 @@ Presented by \textit{Rebecca Willett}. \\
 
 {\bf Motivation:} having measurements $y$ and a neural network $f_{\phi}$ trained with some forward model $A_0$, make high quality reconstructions $\hat{x}$ if forward model used during inference $A_1$ is different from the one using for training ($A_0$). 
 The scheme of the task setup is represented on fig. \ref{fig:inv_prob_setup}
-Authors call this phenomenon a \textit{model drift}
+Authors call this phenomenon a \textit{model drift}. \\
 
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.3]{neurips-2020/images/Screenshot 2020-12-13 at 20.44.08.png}
     \caption{Neural network with parameters $\phi$ (and optionally A) inputs $y$ and outputs an estimate $\hat{x}$.}
     \label{fig:inv_prob_setup}
-\end{figure} \\
+\end{figure} 
 
 {\bf Example:} train a fast MRI network with one acceleration rate but perform inference on some different acceleration rate. 
 Even if the acceleration rate is lower, there is a domain shift that makes the network less capable to produce a high-quality estimate. \\

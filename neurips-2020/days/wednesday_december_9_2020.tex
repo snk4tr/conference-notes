@@ -12,18 +12,17 @@ Talk by \textit{Alexander Mathiasen}. \\
   \item Spectral Normalization \cite{MiyatoKKY18} - a very popular technique to stabilize training of Generative Adversarial Networks (GANs)
   \item matrix inverse and Cayley transform - essential to train flow-based models (type of generative models, alternatives to GANs) \cite{kingma2018glow}
   \item other applications such as matrix determinant and matrix exponential are less practical
-  \item 
-\end{itemize} \\
+\end{itemize} 
 
 {\bf Observation:} computation of SVD can be included in the computation of gradient descent. 
 In this case, getting SVD results from a layer will take no time (because values are already computed when a user asks for them). \\
 
 {\bf Problem:} SVD cannot be directly directly formulated as a part of gradient descent step: 
 \begin{equation} 
-  \hat{M} != M - \eta\nabla_{M}
+  \hat{M} \neq M - \eta\nabla_{M}
 \end{equation} 
 
-{\bf Method:} develop the Fast Householder Multiplication (FastH) method, which is a modification of the Householder transformation that supports parallel execution to better utilize GPU resources and includes some linear algebra tricks \\
+{\bf Method:} develop the Fast Householder Multiplication (FastH) method, which is a modification of the Householder transformation that supports parallel execution to better utilize GPU resources and includes some linear algebra tricks. \\
 
 {\bf Conclusions:} new method is fast on small matrices and also his complexity grows very slowly with grows of size of the decomposed matrix: \\
 \begin{center}
